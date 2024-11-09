@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>跑力值预测</title>
+</head>
+
+<body>
+  <script src="./estimate.js"></script>
+  <h1>跑力值预测</h1>
+  <select id="raceDistance">
+    <option value="1500">1500米</option>
+    <option value="1600">1600米</option>
+    <option value="3000">3000米</option>
+    <option value="3200">3200米</option>
+    <option value="5000">5000米</option>
+    <option value="10000">10公里</option>
+    <option value="15000">15公里</option>
+    <option value="21097.5">半马</option>
+    <option value="42195">全马</option>
+  </select>
+  <input type="time" step="2" value="00:00:00" id="bestTime" placeholder="输入最佳成绩（格式：时：分:秒）">
+  <button id="calculateBtn" onclick="calculateRunningPower()">预测跑力值</button>
+  <p id="result"></p>
+</body>
+
+</html>
