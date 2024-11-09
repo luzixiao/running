@@ -16,9 +16,15 @@ body {
     display: flex;
     justify-content: center;
     width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    max-width: 600px;
   }
 
-
+  table {
+    margin: 0 auto;
+    width: 100%;
+  }
 
   th, td {
     padding: 8px;
