@@ -11,19 +11,27 @@
 <body>
   <script src="./estimate.js"></script>
   <h1>跑力评估</h1>
-  <select id="raceDistance">
-    <option value="1500">1500米</option>
-    <option value="1600">1600米</option>
-    <option value="3000">3000米</option>
-    <option value="3200">3200米</option>
-    <option value="5000">5000米</option>
-    <option value="10000">10公里</option>
-    <option value="15000">15公里</option>
-    <option value="21097.5">半马</option>
-    <option value="42195">全马</option>
-  </select>
-  <input type="time" step="2" value="00:00:00" id="bestTime" placeholder="输入最佳成绩（格式：时：分:秒）">
-  <button id="calculateBtn" onclick="calculateRunningPower()">计算跑力</button>
+  <div class="row">
+
+
+    <select id="raceDistance">
+      <option value="1500">1500米</option>
+      <option value="1600">1600米</option>
+      <option value="3000">3000米</option>
+      <option value="3200">3200米</option>
+      <option value="5000">5000米</option>
+      <option value="10000">10公里</option>
+      <option value="15000">15公里</option>
+      <option value="21097.5">半马</option>
+      <option value="42195">全马</option>
+    </select>
+    <input type="time" step="2" value="00:00:00" id="bestTime" placeholder="输入最佳成绩（格式：时：分:秒）">
+    <button id="calculateBtn" onclick="calculateByRecord()">计算跑力</button>
+  </div>
+  <div class="row">
+    <input type="number" id="powerInput" min="20" max="85" placeholder="跑力值(20-85)">
+    <button id="calculateByPower" onclick="calculateByPower()">根据跑力值计算</button>
+  </div>
   <p id="result"></p>
 
   <div class="table-container" style="display: none;" id="tableContainer">

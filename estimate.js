@@ -173,13 +173,99 @@ const lowRuningPowerCol = {
     "全马时间": 12,
 }
 
-
-function calculateRunningPower() {
-    // 首先隐藏所有表格
+function hideAllTables() {
     document.getElementById('resultTableHigh').style.display = 'none';
     document.getElementById('resultTableLow').style.display = 'none';
     document.getElementById('tableContainer').style.display = 'none';
+}
 
+function calculateRunningPower(raceDistance, totalSeconds, powerData, powerCol) {
+    var runningPowerValue = -1;
+
+    // 查找对应的跑力值
+    let col = powerCol[raceDistance];
+    for (let i = 0; i < powerData.length; i++) {
+        let minimumTime = powerData[i][col]
+        if (totalSeconds <= minimumTime) {
+            runningPowerValue = powerData[i][0];
+        } else {
+            break;
+        }
+    }
+    return runningPowerValue;
+}
+
+function generateHighPowerSuggestion(runningPowerValue) {
+    // 根据找到的跑力值计算配速
+    let paceRow = runningPower.find(row => row[0] === runningPowerValue);
+    if (paceRow) {
+        // 获取表格中所有配速单元格
+        const paceElements = document.querySelectorAll('#resultTableHigh tbody td:last-child');
+
+        // 从recommendPace数组中获取对应跑力值的行
+        let recommendRow = recommendPace.find(row => row[0] === runningPowerValue);
+        if (recommendRow) {
+            paceElements.forEach((element, index) => {
+                if (index < 2) {
+                    let baseIndex = index * 2 + 1;
+                    let value1 = recommendRow[baseIndex];
+                    let value2 = recommendRow[baseIndex + 1];
+                    if (value1 !== -1 && value2 !== -1) {
+                        element.textContent = `${formatPace(value1)}~${formatPace(value2)}`;
+                    } else {
+                        element.textContent = '-';
+                    }
+                } else {  // 处理所有剩余的列
+                    let value = recommendRow[index + 3];
+                    element.textContent = value !== -1 ? formatPace(value) : '-';
+                }
+            });
+        }
+    }
+    if (runningPowerValue !== -1) {
+        document.getElementById('result').innerHTML = `预估跑力值为：${runningPowerValue}`;
+    } else {
+        document.getElementById('result').innerHTML = `跑力计算失败`;
+    }
+    // 在计算完成后显示表格
+    document.getElementById('tableContainer').style.display = 'block';
+    document.getElementById('resultTableHigh').style.display = 'block';
+
+}
+
+function generateLowPowerSuggestion(runningPowerValue) {
+    document.getElementById('result').innerHTML = `预估跑力值为：${runningPowerValue}`;
+    // 根据找到的低跑力值计算配速，配合页面中的低跑力值表格进行显示
+    let paceRow = lowRuningPower.find(row => row[0] === runningPowerValue);
+    if (paceRow) {
+        const paceElements = document.querySelectorAll('#resultTableLow tbody td:last-child');
+        paceElements.forEach((element, index) => {
+            element.textContent = paceRow[index + 3] !== -1 ? formatPace(paceRow[index + 3]) : '-';
+        });
+    }
+
+    // 在计算完成后显示表格
+    document.getElementById('tableContainer').style.display = 'block';
+    document.getElementById('resultTableLow').style.display = 'block';
+}
+
+function calculateByPower() {
+    hideAllTables();
+    var powerValue = Number(document.getElementById('powerInput').value);
+    if (powerValue >= 20 && powerValue < 30) {
+        generateLowPowerSuggestion(powerValue)
+    } else if (powerValue >= 30 && powerValue <= 85) {
+        generateHighPowerSuggestion(powerValue)
+    } else {
+        document.getElementById('result').innerHTML = `跑力值输入错误，请输入20~85之间的整数！`;
+    }
+}
+
+function calculateByRecord() {
+    // 首先隐藏所有表格
+    hideAllTables();
+    // 清空powerInput的值
+    document.getElementById('powerInput').value = '';
     const raceDistance = Number(document.getElementById('raceDistance').value);
     const bestTime = document.getElementById('bestTime').value;
 
@@ -188,88 +274,26 @@ function calculateRunningPower() {
     const totalSeconds = parseInt(timeArray[0]) * 3600 + parseInt(timeArray[1]) * 60 + parseInt(timeArray[2]);
     var runningPowerValue = -1;
 
-    // 查找对应的跑力值
-    let col = runningPowerCol[raceDistance];
-    for (let i = 0; i < runningPower.length; i++) {
-        let minimumTime = runningPower[i][col]
-        if (totalSeconds <= minimumTime) {
-            runningPowerValue = runningPower[i][0];
-        } else {
-            break;
-        }
-    }
+    // 初步计算是否大于30
+    runningPowerValue = calculateRunningPower(raceDistance, totalSeconds, runningPower, runningPowerCol)
 
-    if (runningPowerValue >= 30){
-        // 根据找到的跑力值计算配速
-        let paceRow = runningPower.find(row => row[0] === runningPowerValue);
-        if (paceRow) {
-            // 获取表格中所有配速单元格
-            const paceElements = document.querySelectorAll('#resultTableHigh tbody td:last-child');
-
-            // 从recommendPace数组中获取对应跑力值的行
-            let recommendRow = recommendPace.find(row => row[0] === runningPowerValue);
-            if (recommendRow) {
-                paceElements.forEach((element, index) => {
-                    if (index < 2) {
-                        let baseIndex = index * 2 + 1;
-                        let value1 = recommendRow[baseIndex];
-                        let value2 = recommendRow[baseIndex + 1];
-                        if (value1 !== -1 && value2 !== -1) {
-                            element.textContent = `${formatPace(value1)}~${formatPace(value2)}`;
-                        } else {
-                            element.textContent = '-';
-                        }
-                    } else {  // 处理所有剩余的列
-                        let value = recommendRow[index + 3];
-                        element.textContent = value !== -1 ? formatPace(value) : '-';
-                    }
-                });
-            }
-        }
-        if (runningPowerValue !== -1) {
-            document.getElementById('result').innerHTML = `预估跑力值为：${runningPowerValue}`;
-        } else {
-            document.getElementById('result').innerHTML = `跑力计算失败`;
-        }
-        // 在计算完成后显示表格
-        document.getElementById('tableContainer').style.display = 'block';
-        document.getElementById('resultTableHigh').style.display = 'block';
+    if (runningPowerValue >= 30) {
+        generateHighPowerSuggestion(runningPowerValue)
 
     } else if (raceDistance === 1600 || raceDistance === 5000) {
         // 计算低跑力值
-        let col = lowRuningPowerCol[raceDistance];
-        for (let i = 0; i < lowRuningPower.length; i++) {
-            let minimumTime = lowRuningPower[i][col]
-            if (totalSeconds <= minimumTime) {
-                runningPowerValue = lowRuningPower[i][0];
-            } else {
-                break;
-            }
-        }
+        runningPowerValue = calculateRunningPower(raceDistance, totalSeconds, lowRuningPower, lowRuningPowerCol)
         if (runningPowerValue !== -1) {
-            document.getElementById('result').innerHTML = `预估跑力值为：${runningPowerValue}`;
+            generateLowPowerSuggestion(runningPowerValue)
         } else {
             document.getElementById('result').innerHTML = `跑力太低，多运动吧！`;
-        }
-            // 根据找到的低跑力值计算配速，配合页面中的低跑力值表格进行显示
-        let paceRow = lowRuningPower.find(row => row[0] === runningPowerValue);
-        if (paceRow) {
-            const paceElements = document.querySelectorAll('#resultTableLow tbody td:last-child');
-            paceElements.forEach((element, index) => {
-                element.textContent = paceRow[index + 3] !== -1 ? formatPace(paceRow[index + 3]) : '-';
-            });
+            hideAllTables();
         }
 
-        // 在计算完成后显示表格
-        document.getElementById('tableContainer').style.display = 'block';
-        document.getElementById('resultTableLow').style.display = 'block';
-        
     } else {
         document.getElementById('result').innerHTML = `跑力值预估低于30，请输入1600米或5000米最佳赛事成绩以预测跑力值！`;
+        hideAllTables();
     }
-    
-
-    
 }
 
 // 格式化配速显示
