@@ -175,6 +175,11 @@ const lowRuningPowerCol = {
 
 
 function calculateRunningPower() {
+    // 首先隐藏所有表格
+    document.getElementById('resultTableHigh').style.display = 'none';
+    document.getElementById('resultTableLow').style.display = 'none';
+    document.getElementById('tableContainer').style.display = 'none';
+
     const raceDistance = Number(document.getElementById('raceDistance').value);
     const bestTime = document.getElementById('bestTime').value;
 

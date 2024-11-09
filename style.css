@@ -13,17 +13,16 @@ body {
   }
 
   .table-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin: 0 auto;
-    text-align: center;
-    max-width: 600px;
+    display: block;
+    width: fit-content;
+    margin: 20px auto;
+    border: 1px solid #ddd;
+    padding: 15px;
   }
 
   table {
+    border-collapse: collapse;
     margin: 0 auto;
-    width: 100%;
   }
 
   th, td {
