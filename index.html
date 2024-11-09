@@ -25,6 +25,89 @@
   <input type="time" step="2" value="00:00:00" id="bestTime" placeholder="输入最佳成绩（格式：时：分:秒）">
   <button id="calculateBtn" onclick="calculateRunningPower()">预测跑力值</button>
   <p id="result"></p>
+
+  <div class="table-container">
+    <table border="1" id="resultTable">
+      <thead>
+        <tr>
+          <th>配速类型</th>
+          <th>距离</th>
+          <th>配速</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td rowspan="2">E</td>
+          <td>1000</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1600</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td rowspan="2">M</td>
+          <td>1000</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1600</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td rowspan="3">T</td>
+          <td>400</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1000</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1600</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td rowspan="4">A</td>
+          <td>400</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1000</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1200</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>1600</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td rowspan="5">R</td>
+          <td>200</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>300</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>400</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>600</td>
+          <td></td>
+        </tr>
+        <tr>
+          <td>800</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 
 </html>
